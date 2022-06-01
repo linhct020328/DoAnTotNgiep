@@ -89,8 +89,8 @@ def startFaceRecongition():
                 id = "unknown"
                 confidence = "  {0}%".format(round(confidence - 100))
                 door_lock(key, iv)
-                imgByte = frame.tobytes()
-                img = imgByte.hex()
+                _, img_encode = cv2.imencode('.jpg', frame)
+                imgByte = img_encode.tobytes()
                 imgSend = convertMsgToAes(img, key, iv)
                 client.publish(topic, imgSend)
 
