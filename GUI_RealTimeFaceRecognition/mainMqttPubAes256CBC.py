@@ -23,11 +23,6 @@ font1 = cv2.FONT_HERSHEY_SIMPLEX
 font2 = cv2.FONT_HERSHEY_DUPLEX
 
 client = paho.Client()
-client.tls_set(pathCa, pathClient, pathClientKey, tls_version=ssl.PROTOCOL_TLSv1_2)
-client.tls_insecure_set(True)
-client.connect(mqtt_broker, mqtt_port)
-client.username_pw_set(username=mqttUser, password=mqttPassword)
-
 
 def convertMsgToAes(msg, key, iv):
     encoded = encrypt_aes_256(msg, key, iv)
@@ -42,6 +37,10 @@ def door_unlock(key, iv):
     client.publish(topic, unlock)
 
 def startFaceRecongition():
+    client.tls_set(pathCa, pathClient, pathClientKey, tls_version=ssl.PROTOCOL_TLSv1_2)
+    client.tls_insecure_set(True)
+    client.connect(mqtt_broker, mqtt_port)
+    client.username_pw_set(username=mqttUser, password=mqttPassword)
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read('trainer/trainer.yml')
     cascadePath = "./cascades/haarcascade_frontalface_default.xml"
